@@ -1,13 +1,33 @@
 #!/bin/bash
 
-##Make this script safe!
-DATA_DIR=../data/
-FASTQC_DIR=../results/fastqc
-THREADS=10
+#Dependencies
+#  1) fastqc
+#  2) crimson
+
+
+while getopts d:f:t:h o
+do
+    case "$o" in
+        d) DATA_DIR="$OPTARG";;
+        f) FASTQC_DIR="$OPTARG";;
+        t) THREADS="$OPTARG";;
+        h) echo $USAGE
+            exit 1;;
+    esac
+done
+
+if [[ $DATA_DIR == "" || $FASTQC_DIR == "" || $THREADS == "" ]]; then
+    echo "Usage: $0 -d data_dir -f results_dir -t threads "
+    exit 0
+fi
+
+mkdir -p $FASTQC_DIR
+
+export DISPLAY=:0.0
 
 #run fastqc 
 echo "Running fastqc with $THREADS threads"
-find $DATA_DIR \( -name '*.fastq.gz' \) -print0 | xargs -0 fastqc --outdir $FASTQC_DIR --threads 10 --nogroup --extract 
+find $DATA_DIR \( -name '*.fastq.gz' \) -print0 | xargs -0 fastqc --outdir $FASTQC_DIR --threads $THREADS --nogroup --extract 
 
 #keep fastqc data files only
 echo "mopping up extra files."
