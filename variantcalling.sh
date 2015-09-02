@@ -54,17 +54,21 @@ SAMPLENAME="${SAMPLEBASENAME%%.*}"
 
 
 #check dependencies are on the $PATH
-command -v VPhaser2 >/dev/null 2>&1 ||{ echo >&2 "VPhaser2 is not installed. Aborting..."; exit 1;  }
+#command -v VPhaser2 >/dev/null 2>&1 ||{ echo >&2 "VPhaser2 is not installed. Aborting..."; exit 1;  }
 
 
 if [[ $CALLER == "vphaser2"  ]]; then
     echo "calling minority variants with $CALLER"
 
+    
+    #check dependencies are on the $PATH
+    command -v VPhaser2 >/dev/null 2>&1 ||{ echo >&2 "VPhaser2 is not installed. Aborting..."; exit 1;  }
+
     mkdir -p "$OUTDIR/$SAMPLENAME"
 
     #run with explicit vphaser2 parameters. 
     #See the vphaser2 manual for description(http://www.broadinstitute.org/software/viral/docs/VPhaserII.pdf)
-   OMP_NUM_THREADS=16 VPhaser2 -i "$BAMFILE" -o "$OUTDIR/$SAMPLENAME" -e 1 -w 500 -ig 0 -delta 2 -ps 30 -dt 1 -cy 1 -mp 1 -qual 20 -a 0.05
+    OMP_NUM_THREADS=16 VPhaser2 -i "$BAMFILE" -o "$OUTDIR/$SAMPLENAME" -e 1 -w 500 -ig 0 -delta 2 -ps 30 -dt 1 -cy 1 -mp 1 -qual 20 -a 0.05
 
 fi
 
