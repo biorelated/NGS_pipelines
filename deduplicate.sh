@@ -25,7 +25,7 @@
 #Dependencies
 # 1) QUASR (https://github.com/sanger-pathogens/QUASR)
 
-#  Command line paramaters
+#  Declate the command line paramaters
 while getopts i:o:h opt
 do
     case "$opt" in
@@ -36,32 +36,19 @@ do
     esac
 done
 
+#Dont run this pipeline unless the paramaters are specified. 
 if [[ $DATA_DIR == "" || $OUT_DIR == "" ]]; then
     echo "Usage: $0 -i data_dir -o out_dir "
     exit 0
 fi
 
-
-# function updateFolder
-# {
-#     mkdir "$2"
-#     for folder in "$1"/*; do
-#         if [[ -d $folder ]]; then
-#             foldername="${folder##*/}"
-#             for file in "$1"/"$foldername"/*; do
-#                 filename="${file##*/}"
-#                 newfilename="$foldername"_"$filename"
-#                 cp "$file" "$2"/"$newfilename"
-#             done
-#         fi
-#     done
-# }
-
+#create the output directory 
 mkdir -p $OUT_DIR
 
-# run the deduplication command
+# Remove duplicates using quasr's duplicate command/ module
 find $DATA_DIR -type d -exec sh -c '(cd {} && java -jar ~/softwares/quasr_dist/readsetProcessor.jar --duplicate --gzip --num 1000 -i *_1.fastq.gz -r *_2.fastq.gz  --outprefix $(basename "$PWD") >>deduplication.log)' ';'
 
+#write and move the outpur deduplicated reads to sample folder name in the specied directory
 for full_filename in $DATA_DIR*/*.uniq.*
 do
     foldername=$(basename ${full_filename%.*.*.*.*})
