@@ -1,4 +1,3 @@
-
 # This file is part of a minor variant calling pipeline.
 # Copyright (C) 2015   George Githinji  <ggithinji@kemri-wellcome.org>
 
@@ -25,7 +24,7 @@
 #Dependencies
 # 1) QUASR (https://github.com/sanger-pathogens/QUASR)
 
-#  Declate the command line paramaters
+# Declate the command line paramaters
 while getopts i:o:h opt
 do
     case "$opt" in
@@ -48,7 +47,7 @@ mkdir -p $OUT_DIR
 # Remove duplicates using quasr's duplicate command/ module
 find $DATA_DIR -type d -exec sh -c '(cd {} && java -jar ~/softwares/quasr_dist/readsetProcessor.jar --duplicate --gzip --num 1000 -i *_1.fastq.gz -r *_2.fastq.gz  --outprefix $(basename "$PWD") >>deduplication.log)' ';'
 
-#write and move the outpur deduplicated reads to sample folder name in the specied directory
+#write and move the output deduplicated reads to sample folder name in the specied directory
 for full_filename in $DATA_DIR*/*.uniq.*
 do
     foldername=$(basename ${full_filename%.*.*.*.*})
