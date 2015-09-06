@@ -20,7 +20,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 # Dependencies
-# 1. Trimmomatics
+# 1. Trimmomatics (http://www.usadellab.org/cms/index.php?page=trimmomatic)
 
 #/bin/bash
 
@@ -44,7 +44,7 @@ fi
 #command -v java -jar ~/bin/trimmomatic.jar >/dev/null 2&1 || { echo >&2 "Trimmomatic is not installed. Aborting"; exit 1; }
 
 
-find $INPUTDIR/* -type d -exec sh -c '(cd {} dirname=$(basename "$PWD") && java -jar ~/bin/trimmomatic.jar PE -threads 16 -phred33 -trimlog $(basename "$PWD").log *.f.fastq.gz *.r.fastq.gz $(basename "$PWD").1P.fq.gz $(basename "$PWD").1U.fq.gz $(basename "$PWD").2P.fq.gz $(basename "$PWD").2U.fq.gz SLIDINGWINDOW:10:20 MINLEN:140 )' ';'
+find $INPUTDIR/* -type d -exec sh -c '(cd {} java -jar ~/bin/trimmomatic.jar PE -threads 16 -phred33 -trimlog $(basename "$PWD").log *.f.fastq.gz *.r.fastq.gz $(basename "$PWD").1P.fq.gz $(basename "$PWD").1U.fq.gz $(basename "$PWD").2P.fq.gz $(basename "$PWD").2U.fq.gz SLIDINGWINDOW:10:20 MINLEN:140 )' ';'
 
 
 for filename in $INPUTDIR/**/*.fq.*
@@ -54,4 +54,3 @@ do
     mkdir -p "$OUTDIR/$foldername"
     mv "$filename" "$OUTDIR/$foldername/$newname.fastq.gz"
 done
-
