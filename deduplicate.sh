@@ -45,7 +45,7 @@ fi
 mkdir -p $OUT_DIR
 
 # Remove duplicates using quasr's duplicate command/ module
-find $DATA_DIR -type d -exec sh -c '(cd {} && java -jar ~/softwares/quasr_dist/readsetProcessor.jar --duplicate --gzip --num 1000 -i *_1.fastq.gz -r *_2.fastq.gz  --outprefix $(basename "$PWD") >>deduplication.log)' ';'
+find $DATA_DIR/* -type d -exec sh -c '(cd {} && java -jar ~/softwares/quasr_dist/readsetProcessor.jar --duplicate --gzip --num 1000 -i *_1.fastq.gz -r *_2.fastq.gz  --outprefix $(basename "$PWD") >>deduplication.log)' ';'
 
 #write and move the output deduplicated reads to sample folder name in the specied directory
 for full_filename in $DATA_DIR*/*.uniq.*
